@@ -1,0 +1,50 @@
+#Problema 4: Una videoteca digital necesita identificar rápidamente qué 
+#material audiovisual es popular y reciente. La información está en una
+#lista de películas, donde cada película es una lista con los siguientes datos:
+
+from tabulate import tabulate
+
+# Lista de películas: [Num, Título, Año de lanzamiento, Calificación (num), Género, Estrella (símbolo)]
+peliculas = [
+    [1, "michael jackson", 2026, 9.5, "historia - Drama" ],
+    [2, "intercambiados", 2026, 9.1, "Familiar - Aventura"],
+    [3, "El diablo viste a la moda 2", 2026, 8.5, "Drama - Comedia"],
+    [4, "Hoppers", 2025, 8.3, "Animacion - Aventura"],
+    [5, "Ápex", 2026, 7.5, "Suspenso - Accion"],
+    [6, "Mortal komba 2", 2021, 7.2, "Accion - Aventura"],
+    [7, "GOAT la cabra que cambio el juego", 2020, 6.5, "Familiar - Accion"],
+    [8, "Super mario Galaxy", 2026, 7.1, "Fantacia - Familiar"],
+    [9, "Criaturas Luminosas", 2026, 5.5, "Drama"],
+    [10, "La posesión de la momia", 2022, 8.2, "Terror"]
+]
+
+# Criterios de filtrado para la grabación:
+min_rating = 6.0  # calificación mínima (numérica)
+min_year = 2020 # año mínimo
+
+# Filtramos usando comprensión de listas:
+# Por cada película `p` en `peliculas`, incluimos `p` si:
+# - p[3] (calificación numérica) >= min_rating
+# - y p[2] (año) >= min_year
+peliculas_filtradas = [p for p in peliculas if p[3] >= min_rating and p[2] >= min_year]
+
+# Convertimos la calificación numérica a estrellas para presentar:
+# "★" * min(5, max(1, int(round(p[3] / 2))))
+# Esto divide la nota entre 2, redondea y la limita entre 1 y 5.
+peliculas_tabla = [
+    [
+        p[0], # Numero de película
+        p[1], # Título
+        p[2], # Año de lanzamiento
+        p[4], # Género
+        p[3], # Calificación numérica también
+        "★" * min(5, max(1, int(round(p[3] / 2))))
+    ]
+    for p in peliculas_filtradas
+]
+
+print("--- Videoteca Digital: títulos populares y recientes ---")
+print(f"Criterio: calificación >= {min_rating} y año >= {min_year}\n")
+print(f"Cantidad de títulos que cumplen ambos criterios: {len(peliculas_tabla)}\n")
+# Mostrar la tabla con las columnas útiles para la grabación
+print(tabulate(peliculas_tabla, headers=["Num", "Título", "Año de lanzamiento", "Género", "Calificación","Estrellas"], tablefmt="fancy_grid"))
